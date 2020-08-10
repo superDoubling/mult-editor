@@ -1,0 +1,42 @@
+{
+  "extends": "eslint-config-egg",
+  "globals": {
+    "BigInt": true
+  },
+  "rules": {
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "strict": [
+      "error",
+      "never"
+    ],
+    "prefer-const": [
+      "warn",
+      {
+        "ignoreReadBeforeAssign": true
+      }
+    ],
+    "max-len": [
+      "warn",
+      120,
+      4,
+      {
+        "ignoreUrls": true,
+        "ignoreComments": true
+      }
+    ],
+    "valid-jsdoc": "off",
+    "no-constant-condition": "warn",
+    "no-unused-vars": "warn",
+    "no-bitwise": "off",
+    "array-bracket-spacing": [
+      "error",
+      "always"
+    ]
+  }
+}
