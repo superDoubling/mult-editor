@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>导航页</title>
+    <link rel="icon" href="/public/image/note.png" type="image/png/jpg" sizes="96*96">
+    <link rel="stylesheet" href="/public/css/webix.css" type="text/css">
+    <script src="/public/js/webix.js" type="text/javascript"></script>
+    <script src="/public/js/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div>
+    <div id="indexDiv"></div>
+</div>
+<style type="text/css">
+</style>
+<script type="text/javascript" charset="utf-8">
+
+    webix.ready(function () {
+        webix.ui({
+            container: "indexDiv",
+            view: "menu",
+            type: {
+                height: 40,
+            },
+            data: [
+                { id: "1", value: "创建页", href: "/page/new", target: "_blank" },
+                { id: "2", value: "查看页", href: "/page/view", target: "_blank" },
+                // { id: "3", value: "编辑页", href: "/page/edit", target: "_blank" },
+            ]
+        });
+    });
+
+</script>
+</body>
+</html>

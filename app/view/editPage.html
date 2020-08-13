@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>编辑页</title>
+    <link rel="icon" href="/public/image/note.png" type="image/png/jpg" sizes="96*96">
+    <link rel="stylesheet" href="/public/webix/codebase/webix.css" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="/public/css/base.css" type="text/css">
+    <script src="/public/webix/codebase/webix.js" type="text/javascript"></script>
+    <script src="/public/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/public/js/bootstrap-suggest.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="header"></div>
+<div>
+    <div id="editPageFormDiv"></div>
+</div>
+<style type="text/css">
+    .myBreak {
+        word-break: break-all;
+    }
+</style>
+
+<script type="text/javascript" charset="utf-8">
+    webix.ready(function () {
+        webix.ui({
+            view: "form",
+            borderless: true,
+            container: "editPageFormDiv",
+            id: "editPageForm",
+            elements: [
+                {
+                    view: "fieldset", label: "编辑文件", body: {
+                        rows: [
+                            { height: 20 },
+                            {
+                                rows: [
+                                    {
+                                        view: "text",
+                                        labelPosition: "top",
+                                        label: "文件名: ",
+                                        width: 300,
+                                        value: `{{file.filename}}`,
+                                        disabled: true,
+                                        name: "filename",
+                                        id: "filename"
+                                    },
+                                    { height: 0 }
+                                ]
+                            },
+                            { height: 20 },
+                            {
+                                cols: [
+                                    {
+                                        id: "firstContent",
+                                        css: "myBreak",
+                                        label: "编辑前: ",
+                                        labelPosition: "top",
+                                        view: "textarea",
+                                        value: `{{file.content}}`,
+                                        disabled: true,
+                                        width: 500,
+                                        height: 500,
+                                    },
+                                    { width: 20 },
+                                    {
+                                        id: "secondContent",
+                                        css: "myBreak",
+                                        label: "编辑后: ",
+                                        labelPosition: "top",
+                                        view: "textarea",
+                                        value: `{{file.content}}`,
+                                        width: 500,
+                                        height: 500,
+                                    },
+                                ]
+                            },
+                            { height: 20 },
+                            {
+                                cols: [
+                                    {
+                                        view: "button",
+                                        id: "commitBtn",
+                                        label: "保存",
+                                        align: "center",
+                                        width: 80,
+                                        height: 40,
+                                        on: {
+                                            onItemClick: function () {
+                                                const content = $$('secondContent').getValue();
+                                                if (content.length < 1) {
+                                                    webix.alert("文件内容不能为空");
+                                                    return;
+                                                }
+                                                $.ajax({
+                                                    url: '{{serverUrl}}/file/content',
+                                                    type: 'get',
+                                                    data: {
+                                                        fileId: "{{file.id}}"
+                                                    },
+                                                    dataType: 'json',
+                                                    success: function (data) {
+                                                        let label = data.content === $$('firstContent').getValue() ? '确认保存？' : '编辑前的内容已更新，请确认后保存！';
+                                                        $$('firstContent').setValue(data.content);
+                                                        webix.ui({
+                                                            view: "window",
+                                                            modal: true,
+                                                            id: "win10",
+                                                            position: "center",
+                                                            width: 350,
+                                                            height: 200,
+                                                            head: {
+                                                                view: "toolbar",
+                                                                height: 40,
+                                                                cols: [
+                                                                    { view: "label", label: "确认" },
+                                                                    { view: "icon", icon: "times-circle", click: "$$('win10').close();" }
+                                                                ]
+                                                            },
+                                                            body: {
+                                                                view: "form",
+                                                                borderless: true,
+                                                                elements: [
+                                                                    {
+                                                                        view: "label",
+                                                                        label: label,
+                                                                    },
+                                                                    { height: 15 },
+                                                                    {
+                                                                        cols: [
+                                                                            {
+                                                                                view: "button",
+                                                                                value: "确认",
+                                                                                click: function () {
+                                                                                    $$('win10').close();
+                                                                                    $.ajax({
+                                                                                        url: '{{serverUrl}}/file/edit',
+                                                                                        type: 'post',
+                                                                                        data: {
+                                                                                            content,
+                                                                                            token: "{{token}}",
+                                                                                            fileId: "{{file.id}}"
+                                                                                        },
+                                                                                        dataType: 'json',
+                                                                                        success: function (data) {
+                                                                                            webix.alert(data.msg);
+                                                                                            $$('firstContent').setValue(content);
+                                                                                        },
+                                                                                        error: function (data) {
+                                                                                            webix.alert(JSON.stringify(data.responseJSON));
+                                                                                        },
+                                                                                    });
+                                                                                }
+                                                                            },
+                                                                            { width: 30 },
+                                                                            {
+                                                                                view: "button", value: "取消", click: function () {
+                                                                                    $$('win10').close();
+                                                                                }
+                                                                            },
+                                                                        ]
+                                                                    }, {}
+                                                                ]
+                                                            }
+                                                        }).show();
+                                                    },
+                                                    error: function (data) {
+                                                        webix.alert(JSON.stringify(data.responseJSON));
+                                                    },
+                                                });
+
+                                            }
+                                        }
+                                    },
+                                    { width: 20 },
+                                    {
+                                        view: "button",
+                                        id: "resetLabBtn",
+                                        label: "重置",
+                                        align: "center",
+                                        width: 80,
+                                        height: 40
+                                    },
+                                ]
+                            },
+                            { height: 10 },
+                        ]
+                    }
+                }
+            ]
+        });
+
+        $$('resetLabBtn').attachEvent("onItemClick", function () {
+            $$('secondContent').setValue($$('firstContent').getValue());
+        });
+
+        // 窗口关闭时释放锁
+        $(window).unload(function(){
+            $.ajax({
+                url: '{{serverUrl}}/file/releaseToken',
+                type: 'POST',
+                data: {
+                    token: "{{token}}",
+                    fileId: "{{file.id}}"
+                },
+                dataType: 'json',
+            });
+        });
+
+        // 断网时释放锁
+        window.addEventListener("offline",function() {
+            $.ajax({
+                url: '{{serverUrl}}/file/releaseToken',
+                type: 'POST',
+                data: {
+                    token: "{{token}}",
+                    fileId: "{{file.id}}"
+                },
+                dataType: 'json',
+            });
+        });
+
+    });
+
+</script>
+</body>
+</html>

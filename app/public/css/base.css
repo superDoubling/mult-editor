@@ -1,0 +1,86 @@
+.center {
+    text-align: center;
+    line-height: 50%;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.hideStr {
+    overflow: hidden;text-overflow:ellipsis;white-space: nowrap;
+}
+
+.hideStr2 {
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    word-break: break-all;
+}
+
+.all_line-break {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    word-break: break-all;
+}
+
+.headerHeight {
+    line-height: 25px!important;
+    vertical-align: middle;
+}
+
+.color-white {
+    background-color: white;
+}
+
+.webix_list_item {
+    border-bottom-color: white;
+}
+
+.webix_list {
+    border-color: white;
+}
+
+.my_style.webix_cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.my_style .webix_column>div {
+    text-align: right;
+    border-color: #ddd;
+}
+
+.win2_size {
+    height: 250px;
+    width: 500px;
+}
+
+.divMinHeight {
+    min-height: 25px;
+}
+
+.clear {
+    clear: both;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+/*修复 daterangesuggest 样式问题*/
+.webix_cal_body .webix_cal_row {
+    clear:none;
+}
